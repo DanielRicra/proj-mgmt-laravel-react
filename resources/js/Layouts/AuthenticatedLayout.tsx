@@ -33,6 +33,24 @@ export default function Authenticated({
 								>
 									Dashboard
 								</NavLink>
+								<NavLink
+									href={route("project.index")}
+									active={route().current("dashboard.index")}
+								>
+									Projects
+								</NavLink>
+								<NavLink
+									href={route("task.index")}
+									active={route().current("task.index")}
+								>
+									All tasks
+								</NavLink>
+								<NavLink
+									href={route("user.index")}
+									active={route().current("user.index")}
+								>
+									Users
+								</NavLink>
 							</div>
 						</div>
 
@@ -53,6 +71,7 @@ export default function Authenticated({
 													viewBox="0 0 20 20"
 													fill="currentColor"
 												>
+													<title>The svg</title>
 													<path
 														fillRule="evenodd"
 														d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
@@ -95,6 +114,7 @@ export default function Authenticated({
 									fill="none"
 									viewBox="0 0 24 24"
 								>
+									<title>Dropdown icon</title>
 									<path
 										className={
 											!showingNavigationDropdown ? "inline-flex" : "hidden"
@@ -130,6 +150,24 @@ export default function Authenticated({
 							active={route().current("dashboard")}
 						>
 							Dashboard
+						</ResponsiveNavLink>
+						<ResponsiveNavLink
+							href={route("project.index")}
+							active={route().current("dashboard.index")}
+						>
+							Projects
+						</ResponsiveNavLink>
+						<ResponsiveNavLink
+							href={route("task.index")}
+							active={route().current("task.index")}
+						>
+							All tasks
+						</ResponsiveNavLink>
+						<ResponsiveNavLink
+							href={route("user.index")}
+							active={route().current("user.index")}
+						>
+							Users
 						</ResponsiveNavLink>
 					</div>
 
