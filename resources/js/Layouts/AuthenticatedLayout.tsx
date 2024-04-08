@@ -6,7 +6,7 @@ import type { User } from "@/types";
 import { Link } from "@inertiajs/react";
 import { type PropsWithChildren, type ReactNode, useState } from "react";
 
-export default function Authenticated({
+export default function AuthenticatedLayout({
 	user,
 	header,
 	children,
