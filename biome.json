@@ -18,6 +18,9 @@
 				"useAltText": "warn",
 				"noSvgWithoutTitle": "warn",
 				"useKeyWithClickEvents": "off"
+			},
+			"security": {
+				"noDangerouslySetInnerHtml": "off"
 			}
 		}
 	}
