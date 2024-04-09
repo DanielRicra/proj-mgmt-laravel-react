@@ -13,7 +13,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/Components/table";
-import { TableHeadContent } from "./components/table-head-content";
+import { TableHeadContent } from "@/Components/table-head-content";
 
 type IndexProps = {
 	projects: ProjectResponse;
@@ -43,11 +43,7 @@ function Index({ auth, projects, queryParams }: IndexProps) {
 	const handleSort = (column: string): void => {
 		const qP = queryParams ?? {};
 		if (column === qP.sort_field) {
-			if (qP.sort_direction === "asc") {
-				qP.sort_direction = "desc";
-			} else {
-				qP.sort_direction = "asc";
-			}
+			qP.sort_direction = qP.sort_direction === "asc" ? "desc" : "asc";
 		} else {
 			qP.sort_field = column;
 			qP.sort_direction = "asc";
