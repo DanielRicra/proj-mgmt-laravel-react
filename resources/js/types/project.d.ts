@@ -1,7 +1,7 @@
 export type ResponseLink = {
   active: boolean;
   label: string;
-  url: string | undefined;
+  url?: string;
 }
 
 type ProjectUser = {
