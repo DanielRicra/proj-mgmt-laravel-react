@@ -10,7 +10,7 @@ export default function Pagination({ links }: PaginationProps) {
 		<nav className="text-center mt-4">
 			{links.map((link) => (
 				<Link
-					key={link.label}
+					key={`page-${link.label}-${Math.random() * 100}`}
 					dangerouslySetInnerHTML={{ __html: link.label }}
 					href={link.url ?? ""}
 					preserveScroll
