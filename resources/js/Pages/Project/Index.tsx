@@ -6,7 +6,14 @@ import { Head, Link, router } from "@inertiajs/react";
 import { projectStatusClass } from "../constants";
 import TextInput from "@/Components/TextInput";
 import { SelectInput } from "@/Components/SelectInput";
-import type { ChangeEvent, KeyboardEvent } from "react";
+import type { KeyboardEvent } from "react";
+import {
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableRow,
+} from "@/Components/table";
+import { TableHeadContent } from "./components/table-head-content";
 
 type IndexProps = {
 	projects: ProjectResponse;
@@ -63,109 +70,113 @@ function Index({ auth, projects, queryParams }: IndexProps) {
 					<div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 						<div className="p-6 text-gray-900 dark:text-gray-100">
 							<div className="overflow-auto">
+								<div className="mb-1 flex">
+									<div className="px-3 py-3 flex items-center gap-1">
+										<span className="">Search:</span>
+										<TextInput
+											placeholder="Project name"
+											className="w-full"
+											defaultValue={queryParams?.name}
+											onBlur={(e) => searchFieldChanged("name", e.target.value)}
+											onKeyDown={(e) => handleKeyDown("name", e)}
+										/>
+									</div>
+									<div className="px-3 py-3 flex gap-1 items-center">
+										<span className="text-nowrap">Filter by status:</span>
+										<SelectInput
+											className="w-full"
+											defaultValue={queryParams?.status}
+											onChange={(e) =>
+												searchFieldChanged("status", e.target.value)
+											}
+										>
+											<option value="">All</option>
+											<option value="pending">Pending</option>
+											<option value="in_progress">In progress</option>
+											<option value="completed">Completed</option>
+										</SelectInput>
+									</div>
+								</div>
 								<table className="w-full">
-									<thead className="border-b-2 dark:border-gray-400 mb-1">
-										<tr className="text-nowrap text-left">
-											<th
-												onClick={() => handleSort("id")}
-												className="px-3 py-3"
-											>
-												ID
-											</th>
-											<th className="px-3 py-3">Image</th>
-											<th
-												onClick={() => handleSort("name")}
-												className="px-3 py-3"
-											>
-												Name
-											</th>
-											<th
-												onClick={() => handleSort("status")}
-												className="px-3 py-3"
-											>
-												Status
-											</th>
-											<th
-												onClick={() => handleSort("created_at")}
-												className="px-3 py-3"
-											>
-												Created Date
-											</th>
-											<th
-												onClick={() => handleSort("due_date")}
-												className="px-3 py-3"
-											>
-												Due Date
-											</th>
-											<th className="px-3 py-3">Created By</th>
-											<th className="px-3 py-3">Actions</th>
-										</tr>
-									</thead>
-									<thead className="border-b-2 dark:border-gray-400 mb-1">
-										<tr className="text-nowrap text-left">
-											<th className="px-3 py-3" />
-											<th className="px-3 py-3" />
-											<th className="px-3 py-3">
-												<TextInput
-													placeholder="Project name"
-													className="w-full"
-													defaultValue={queryParams?.name}
-													onBlur={(e) =>
-														searchFieldChanged("name", e.target.value)
-													}
-													onKeyDown={(e) => handleKeyDown("name", e)}
+									<TableHeader className="border-b-2 dark:border-gray-400 text-left">
+										<TableRow className="text-nowrap mb-2">
+											<TableHead>
+												<TableHeadContent
+													handleSort={() => handleSort("id")}
+													title="ID"
 												/>
-											</th>
-											<th className="px-3 py-3">
-												<SelectInput
-													className="w-full"
-													defaultValue={queryParams?.status}
-													onChange={(e) =>
-														searchFieldChanged("status", e.target.value)
-													}
-												>
-													<option value="">Select Status</option>
-													<option value="pending">Pending</option>
-													<option value="in_progress">In progress</option>
-													<option value="completed">Completed</option>
-												</SelectInput>
-											</th>
-											<th className="px-3 py-3" />
-											<th className="px-3 py-3" />
-											<th className="px-3 py-3" />
-											<th className="px-3 py-3" />
-										</tr>
-									</thead>
+											</TableHead>
+											<TableHead>Image</TableHead>
+											<TableHead>
+												<TableHeadContent
+													handleSort={() => handleSort("name")}
+													title="name"
+												/>
+											</TableHead>
+											<TableHead>
+												<TableHeadContent
+													handleSort={() => handleSort("status")}
+													title="status"
+												/>
+											</TableHead>
+											<TableHead>
+												<TableHeadContent
+													handleSort={() => handleSort("created_at")}
+													title="created at"
+												/>
+											</TableHead>
+											<TableHead>
+												<TableHeadContent
+													handleSort={() => handleSort("due_date")}
+													title="due date"
+												/>
+											</TableHead>
+											<TableHead>Created By</TableHead>
+											<TableHead>Actions</TableHead>
+										</TableRow>
+									</TableHeader>
 									<tbody className="">
 										{projects.data.map((project) => (
-											<tr
+											<TableRow
 												key={project.id}
-												className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+												className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-700"
 											>
-												<td className="py-1 px-2">{project.id}</td>
-												<td className="py-1 px-2">
-													<img
-														src={project.image_path}
-														alt={project.name + "avatar"}
-														width={64}
-														height={64}
-														className="w-12 h-12 rounded-full object-cover"
-													/>
-												</td>
-												<td className="py-1 px-2">{project.name}</td>
-												<td className="py-1 px-2 capitalize">
+												<TableCell className="py-1 px-2">
+													{project.id}
+												</TableCell>
+												<TableCell className="py-1 px-2">
+													<div className="w-12">
+														<img
+															src={project.image_path}
+															alt={project.name + "avatar"}
+															width={64}
+															height={64}
+															className="w-12 h-12 rounded-full object-cover"
+														/>
+													</div>
+												</TableCell>
+												<TableCell className="py-1 px-2">
+													{project.name}
+												</TableCell>
+												<TableCell className="py-1 px-2 text-nowrap">
 													<span
-														className={`px-2 py-1 rounded-xl text-sm leading-3 text-white ${
+														className={`px-2 py-1 rounded-xl text-sm leading-3 text-white capitalize ${
 															projectStatusClass[project.status]
 														}`}
 													>
 														{project.status.split("_").join(" ")}
 													</span>
-												</td>
-												<td className="py-1 px-2">{project.created_at}</td>
-												<td className="py-1 px-2">{project.due_date}</td>
-												<td className="py-1 px-2">{project.created_by.name}</td>
-												<td className="py-1 px-2 ">
+												</TableCell>
+												<TableCell className="py-1 px-2 text-sm">
+													{project.created_at}
+												</TableCell>
+												<TableCell className="py-1 px-2 text-sm">
+													{project.due_date}
+												</TableCell>
+												<TableCell className="py-1 px-2">
+													{project.created_by.name}
+												</TableCell>
+												<TableCell className="py-1 px-2">
 													<div className="flex justify-around items-center">
 														<Link
 															href={route("project.edit", project.id)}
@@ -180,8 +191,8 @@ function Index({ auth, projects, queryParams }: IndexProps) {
 															Delete
 														</Link>
 													</div>
-												</td>
-											</tr>
+												</TableCell>
+											</TableRow>
 										))}
 									</tbody>
 								</table>
