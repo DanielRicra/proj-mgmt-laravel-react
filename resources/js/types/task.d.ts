@@ -1,3 +1,5 @@
+import type { Project } from "./project";
+
 export interface TasksResponse {
   data: Task[]
   links: Links
@@ -22,7 +24,7 @@ export interface Task {
   assigned_user: TaskUser
   created_by: TaskUser
   updated_by: TaskUser
-  project_id: number
+  project: Project
 }
 
 export interface Links {
