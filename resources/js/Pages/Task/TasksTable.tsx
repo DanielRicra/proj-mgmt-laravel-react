@@ -17,13 +17,13 @@ import { SelectInput } from "@/Components/SelectInput";
 type TaskTableProps = {
 	tasks: TasksResponse;
 	queryParams: { [key: string]: string } | null;
-	hideProjectColumn?: boolean;
+	showProjectColumn?: boolean;
 };
 
 function TasksTable({
 	tasks,
 	queryParams,
-	hideProjectColumn = false,
+	showProjectColumn = true,
 }: TaskTableProps) {
 	const searchFieldChanged = (name: string, value: string): void => {
 		const qParams = queryParams ?? {};
@@ -99,7 +99,7 @@ function TasksTable({
 									title="name"
 								/>
 							</TableHead>
-							{!hideProjectColumn && <TableHead>Project Name</TableHead>}
+							{showProjectColumn && <TableHead>Project Name</TableHead>}
 							<TableHead>
 								<TableHeadContent
 									handleSort={() => handleSort("status")}
@@ -123,65 +123,76 @@ function TasksTable({
 						</TableRow>
 					</TableHeader>
 					<tbody className="">
-						{tasks.data.map((task) => (
-							<TableRow
-								key={`task-${task.id}`}
-								className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-700"
-							>
-								<TableCell className="py-1 px-2">{task.id}</TableCell>
-								<TableCell className="py-1 px-2">
-									<div className="w-12">
-										<img
-											src={task.image_path}
-											alt={task.name + "avatar"}
-											width={64}
-											height={64}
-											className="w-12 h-12 rounded-full object-cover"
-										/>
-									</div>
-								</TableCell>
-								<TableCell className="py-1 px-2">{task.name}</TableCell>
-								{!hideProjectColumn && (
+						{tasks.data.length ? (
+							tasks.data.map((task) => (
+								<TableRow
+									key={`task-${task.id}`}
+									className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-700"
+								>
+									<TableCell className="py-1 px-2">{task.id}</TableCell>
 									<TableCell className="py-1 px-2">
-										{task.project.name}
+										<div className="w-12">
+											<img
+												src={task.image_path}
+												alt={task.name + "avatar"}
+												width={64}
+												height={64}
+												className="w-12 h-12 rounded-full object-cover"
+											/>
+										</div>
 									</TableCell>
-								)}
-								<TableCell className="py-1 px-2 text-nowrap">
-									<span
-										className={`px-2 py-1 rounded-xl text-sm leading-3 text-white capitalize ${
-											taskStatusClass[task.status]
-										}`}
-									>
-										{task.status.split("_").join(" ")}
-									</span>
-								</TableCell>
-								<TableCell className="py-1 px-2 text-sm">
-									{task.created_at}
-								</TableCell>
-								<TableCell className="py-1 px-2 text-sm">
-									{task.due_date}
-								</TableCell>
-								<TableCell className="py-1 px-2">
-									{task.created_by?.name}
-								</TableCell>
-								<TableCell className="py-1 px-2">
-									<div className="flex justify-around items-center">
-										<Link
-											href={route("project.edit", task.id)}
-											className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm hover:bg-blue-500 sm:w-auto"
+									<TableCell className="py-1 px-2">{task.name}</TableCell>
+									{showProjectColumn && (
+										<TableCell className="py-1 px-2">
+											{task.project.name}
+										</TableCell>
+									)}
+									<TableCell className="py-1 px-2 text-nowrap">
+										<span
+											className={`px-2 py-1 rounded-xl text-sm leading-3 text-white capitalize ${
+												taskStatusClass[task.status]
+											}`}
 										>
-											Edit
-										</Link>
-										<Link
-											href={route("project.destroy", task.id)}
-											className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-										>
-											Delete
-										</Link>
-									</div>
+											{task.status.split("_").join(" ")}
+										</span>
+									</TableCell>
+									<TableCell className="py-1 px-2 text-sm">
+										{task.created_at}
+									</TableCell>
+									<TableCell className="py-1 px-2 text-sm">
+										{task.due_date}
+									</TableCell>
+									<TableCell className="py-1 px-2">
+										{task.created_by?.name}
+									</TableCell>
+									<TableCell className="py-1 px-2">
+										<div className="flex justify-around items-center">
+											<Link
+												href={route("project.edit", task.id)}
+												className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm hover:bg-blue-500 sm:w-auto"
+											>
+												Edit
+											</Link>
+											<Link
+												href={route("project.destroy", task.id)}
+												className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+											>
+												Delete
+											</Link>
+										</div>
+									</TableCell>
+								</TableRow>
+							))
+						) : (
+							<TableRow>
+								<TableCell
+									colSpan={showProjectColumn ? 9 : 8}
+									className="h-24 text-center"
+								>
+									No results.
 								</TableCell>
 							</TableRow>
-						))}
+						)}
 					</tbody>
 				</table>
 			</div>
