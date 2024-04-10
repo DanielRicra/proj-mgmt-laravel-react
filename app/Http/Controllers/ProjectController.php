@@ -8,6 +8,7 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProjectController extends Controller {
@@ -90,14 +91,27 @@ class ProjectController extends Controller {
    * Show the form for editing the specified resource.
    */
   public function edit(Project $project) {
-    //
+    return inertia('Project/Edit', [
+      'project' => new ProjectResource($project)
+    ]);
   }
 
   /**
    * Update the specified resource in storage.
    */
   public function update(UpdateProjectRequest $request, Project $project) {
-    //
+    $data = $request->validated();
+    $image = $data['image'] ?? null;
+    $data['updated_by'] = Auth::id();
+    if ($image) {
+      if ($project->image_path) {
+        Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+      }
+      // To work execute this command -> "php artisan storage:link", or investigate
+      $data['image_path'] = $image->store('project/' . Str::random(8), 'public');
+    }
+    $project->update($data);
+    return to_route('project.index')->with('success', "Project \"$project->name\" was updated.");
   }
 
   /**
@@ -106,6 +120,9 @@ class ProjectController extends Controller {
   public function destroy(Project $project) {
     $name = $project->name;
     $project->delete();
+    if ($project->image_path) {
+      Storage::disk('public')->deleteDirectory(dirname($project->image_path));
+    }
     return to_route("project.index")->with('success', "Project \"$name\" was deleted.");
   }
 }
