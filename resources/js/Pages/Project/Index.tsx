@@ -52,6 +52,13 @@ function Index({ auth, projects, queryParams, success }: IndexProps) {
 		router.get(route("project.index"), qP);
 	};
 
+	const handleDeleteProject = (projectId: number) => {
+		if (!window.confirm("Are you sure you want to delete this project?")) {
+			return;
+		}
+		router.delete(route("project.destroy", projectId));
+	};
+
 	return (
 		<AuthenticatedLayout
 			user={auth.user}
@@ -220,12 +227,13 @@ function Index({ auth, projects, queryParams, success }: IndexProps) {
 															>
 																Edit
 															</Link>
-															<Link
-																href={route("project.destroy", project.id)}
+															<button
+																type="button"
+																onClick={() => handleDeleteProject(project.id)}
 																className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
 															>
 																Delete
-															</Link>
+															</button>
 														</div>
 													</TableCell>
 												</TableRow>
