@@ -152,7 +152,12 @@ function Index({ auth, projects, queryParams }: IndexProps) {
 													</div>
 												</TableCell>
 												<TableCell className="py-1 px-2">
-													{project.name}
+													<Link
+														href={route("project.show", project.id)}
+														className="hover:underline"
+													>
+														{project.name}
+													</Link>
 												</TableCell>
 												<TableCell className="py-1 px-2 text-nowrap">
 													<span
