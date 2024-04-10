@@ -20,7 +20,7 @@ class ProjectResource extends JsonResource {
       'name' => $this->name,
       'description' => $this->description,
       'created_at' => (new Carbon($this->created_at))->toFormattedDateString(),
-      'due_date' => (new Carbon($this->due_date))->toFormattedDateString(),
+      'due_date' => (new Carbon($this->due_date))->format("Y-m-d H:i"),
       'status' => $this->status,
       'image_path' => $this->image_path ? Storage::url($this->image_path) : '',
       'created_by' => new UserResource($this->createdBy), // To return user object instead of its id in project table
