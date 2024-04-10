@@ -98,7 +98,7 @@ function ProjectDetail({
 							<TasksTable
 								queryParams={queryParams}
 								tasks={tasks}
-								hideProjectColumn={true}
+								showProjectColumn={false}
 							/>
 						</div>
 					</div>
