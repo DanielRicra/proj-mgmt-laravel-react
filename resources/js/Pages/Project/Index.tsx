@@ -18,9 +18,10 @@ import { TableHeadContent } from "@/Components/table-head-content";
 type IndexProps = {
 	projects: ProjectResponse;
 	queryParams: { [key: string]: string } | null;
+	success?: string;
 } & PageProps;
 
-function Index({ auth, projects, queryParams }: IndexProps) {
+function Index({ auth, projects, queryParams, success }: IndexProps) {
 	const searchFieldChanged = (name: string, value: string): void => {
 		const qParams = queryParams ?? {};
 		if (value) {
@@ -55,14 +56,47 @@ function Index({ auth, projects, queryParams }: IndexProps) {
 		<AuthenticatedLayout
 			user={auth.user}
 			header={
-				<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-					Projects
-				</h2>
+				<div className="flex justify-between items-center">
+					<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+						Projects
+					</h2>
+
+					<Link
+						className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+						href={route("project.create")}
+					>
+						Add new
+					</Link>
+				</div>
 			}
 		>
 			<Head title="Project" />
+
 			<div className="py-12">
 				<div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+					{success && (
+						<div className="flex justify-center">
+							<div className="bg-green-600 py-2 px-4 text-white font-bold text-sm rounded-md mb-6 flex gap-1 items-center">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									strokeWidth={1.5}
+									stroke="currentColor"
+									className="w-6 h-6"
+								>
+									<title>Check</title>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+									/>
+								</svg>
+								<span className="capitalize">{success}</span>
+							</div>
+						</div>
+					)}
+
 					<div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
 						<div className="p-6 text-gray-900 dark:text-gray-100">
 							<div className="overflow-auto">
@@ -132,69 +166,77 @@ function Index({ auth, projects, queryParams }: IndexProps) {
 										</TableRow>
 									</TableHeader>
 									<tbody className="">
-										{projects.data.map((project) => (
-											<TableRow
-												key={project.id}
-												className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-700"
-											>
-												<TableCell className="py-1 px-2">
-													{project.id}
-												</TableCell>
-												<TableCell className="py-1 px-2">
-													<div className="w-12">
-														<img
-															src={project.image_path}
-															alt={project.name + "avatar"}
-															width={64}
-															height={64}
-															className="w-12 h-12 rounded-full object-cover"
-														/>
-													</div>
-												</TableCell>
-												<TableCell className="py-1 px-2">
-													<Link
-														href={route("project.show", project.id)}
-														className="hover:underline"
-													>
-														{project.name}
-													</Link>
-												</TableCell>
-												<TableCell className="py-1 px-2 text-nowrap">
-													<span
-														className={`px-2 py-1 rounded-xl text-sm leading-3 text-white capitalize ${
-															projectStatusClass[project.status]
-														}`}
-													>
-														{project.status.split("_").join(" ")}
-													</span>
-												</TableCell>
-												<TableCell className="py-1 px-2 text-sm">
-													{project.created_at}
-												</TableCell>
-												<TableCell className="py-1 px-2 text-sm">
-													{project.due_date}
-												</TableCell>
-												<TableCell className="py-1 px-2">
-													{project.created_by.name}
-												</TableCell>
-												<TableCell className="py-1 px-2">
-													<div className="flex justify-around items-center">
+										{projects.data.length ? (
+											projects.data.map((project) => (
+												<TableRow
+													key={project.id}
+													className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-300 dark:hover:bg-gray-700"
+												>
+													<TableCell className="py-1 px-2">
+														{project.id}
+													</TableCell>
+													<TableCell className="py-1 px-2">
+														<div className="w-12">
+															<img
+																src={project.image_path}
+																alt={project.name + "avatar"}
+																width={64}
+																height={64}
+																className="w-12 h-12 rounded-full object-cover"
+															/>
+														</div>
+													</TableCell>
+													<TableCell className="py-1 px-2">
 														<Link
-															href={route("project.edit", project.id)}
-															className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm hover:bg-blue-500 sm:w-auto"
+															href={route("project.show", project.id)}
+															className="hover:underline"
 														>
-															Edit
+															{project.name}
 														</Link>
-														<Link
-															href={route("project.destroy", project.id)}
-															className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+													</TableCell>
+													<TableCell className="py-1 px-2 text-nowrap">
+														<span
+															className={`px-2 py-1 rounded-xl text-sm leading-3 text-white capitalize ${
+																projectStatusClass[project.status]
+															}`}
 														>
-															Delete
-														</Link>
-													</div>
+															{project.status.split("_").join(" ")}
+														</span>
+													</TableCell>
+													<TableCell className="py-1 px-2 text-sm">
+														{project.created_at}
+													</TableCell>
+													<TableCell className="py-1 px-2 text-sm">
+														{project.due_date}
+													</TableCell>
+													<TableCell className="py-1 px-2">
+														{project.created_by.name}
+													</TableCell>
+													<TableCell className="py-1 px-2">
+														<div className="flex justify-around items-center">
+															<Link
+																href={route("project.edit", project.id)}
+																className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm hover:bg-blue-500 sm:w-auto"
+															>
+																Edit
+															</Link>
+															<Link
+																href={route("project.destroy", project.id)}
+																className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+															>
+																Delete
+															</Link>
+														</div>
+													</TableCell>
+												</TableRow>
+											))
+										) : (
+											<TableRow>
+												<TableCell colSpan={8} className="h-24 text-center">
+													No results.
 												</TableCell>
 											</TableRow>
-										))}
+										)}
 									</tbody>
 								</table>
 							</div>
