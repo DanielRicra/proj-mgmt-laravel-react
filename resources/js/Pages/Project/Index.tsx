@@ -14,6 +14,7 @@ import {
 	TableRow,
 } from "@/Components/table";
 import { TableHeadContent } from "@/Components/table-head-content";
+import Toast from "@/Components/Toast";
 
 type IndexProps = {
 	projects: ProjectResponse;
@@ -83,24 +84,26 @@ function Index({ auth, projects, queryParams, success }: IndexProps) {
 				<div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
 					{success && (
 						<div className="flex justify-center">
-							<div className="bg-green-600 py-2 px-4 text-white font-bold text-sm rounded-md mb-6 flex gap-1 items-center">
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-									strokeWidth={1.5}
-									stroke="currentColor"
-									className="w-6 h-6"
-								>
-									<title>Check</title>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-									/>
-								</svg>
-								<span className="capitalize">{success}</span>
-							</div>
+							<Toast duration={2000}>
+								<div className="bg-green-600 py-2 px-4 text-white font-bold text-sm rounded-md mb-6 flex gap-1 items-center">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										fill="none"
+										viewBox="0 0 24 24"
+										strokeWidth={1.5}
+										stroke="currentColor"
+										className="w-6 h-6"
+									>
+										<title>Check</title>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+										/>
+									</svg>
+									<span className="capitalize">{success}</span>
+								</div>
+							</Toast>
 						</div>
 					)}
 
