@@ -18,7 +18,7 @@ export interface Task {
   description: string
   image_path: string
   status: "pending" | "in_progress" | "completed"
-  priority: string
+  priority: "low" | "medium" | "high"
   due_date: string
   created_at: string
   assigned_user: TaskUser
