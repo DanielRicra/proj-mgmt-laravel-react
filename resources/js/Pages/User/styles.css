@@ -1,0 +1,10 @@
+
+html.dark {
+  input[type="password"]::-ms-reveal {
+    filter: invert(100%);
+  }
+}
+
+input[type="password"]::-ms-reveal {
+  filter: none;
+}
