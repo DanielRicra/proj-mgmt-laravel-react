@@ -22,7 +22,7 @@ type FormDataTypes = {
 	_method: "PUT";
 };
 
-function EditProject({ auth, project }: {} & EditProjectProps) {
+function EditProject({ auth, project }: EditProjectProps) {
 	const { data, setData, post, errors, reset } = useForm<FormDataTypes>({
 		image: null,
 		name: project.name,
