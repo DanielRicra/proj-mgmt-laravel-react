@@ -84,7 +84,7 @@ function Index({ auth, projects, queryParams, success }: IndexProps) {
 				<div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
 					{success && (
 						<div className="flex justify-center">
-							<Toast duration={2000}>
+							<Toast duration={2000} message={success}>
 								<div className="bg-green-600 py-2 px-4 text-white font-bold text-sm rounded-md mb-6 flex gap-1 items-center">
 									<svg
 										xmlns="http://www.w3.org/2000/svg"
