@@ -11,7 +11,7 @@ export const taskStatusClass = {
 }
 
 export const taskPriorityClass = {
-  pending: "bg-gray-500",
-  in_progress: "bg-amber-500",
-  completed: "bg-red-500",
+  low: "bg-gray-500",
+  medium: "bg-amber-500",
+  high: "bg-red-500",
 }
