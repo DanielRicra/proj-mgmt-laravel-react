@@ -8,7 +8,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/Components/table";
-import type { TasksResponse } from "@/types/task";
+import type { Task, TasksResponse } from "@/types/task";
 import { taskStatusClass } from "../constants";
 import { TableHeadContent } from "@/Components/table-head-content";
 import TextInput from "@/Components/TextInput";
@@ -53,6 +53,17 @@ function TasksTable({
 			qP.sort_direction = "asc";
 		}
 		router.get(route("task.index"), qP);
+	};
+
+	const handleDeleteTask = (task: Task) => {
+		if (
+			!window.confirm(
+				`Are you sure you want to delete this Task "${task.name}"?`,
+			)
+		) {
+			return;
+		}
+		router.delete(route("task.destroy", task.id));
 	};
 
 	return (
@@ -141,7 +152,14 @@ function TasksTable({
 											/>
 										</div>
 									</TableCell>
-									<TableCell className="py-1 px-2">{task.name}</TableCell>
+									<TableCell className="py-1 px-2">
+										<Link
+											href={route("task.show", task.id)}
+											className="hover:underline"
+										>
+											{task.name}
+										</Link>
+									</TableCell>
 									{showProjectColumn && (
 										<TableCell className="py-1 px-2">
 											{task.project.name}
@@ -168,17 +186,18 @@ function TasksTable({
 									<TableCell className="py-1 px-2">
 										<div className="flex justify-around items-center">
 											<Link
-												href={route("project.edit", task.id)}
+												href={route("task.edit", task.id)}
 												className="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-gray-100 shadow-sm hover:bg-blue-500 sm:w-auto"
 											>
 												Edit
 											</Link>
-											<Link
-												href={route("project.destroy", task.id)}
+											<button
+												type="button"
+												onClick={() => handleDeleteTask(task)}
 												className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
 											>
 												Delete
-											</Link>
+											</button>
 										</div>
 									</TableCell>
 								</TableRow>
