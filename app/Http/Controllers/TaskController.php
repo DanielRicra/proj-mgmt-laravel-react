@@ -37,14 +37,32 @@ class TaskController extends Controller {
    * Show the form for creating a new resource.
    */
   public function create() {
-    //
+    $projects = Project::query()->orderBy('name')->get();
+    $users = User::query()->orderBy('name')->get();
+
+    return inertia("Task/Create", [
+      'projects' => ProjectResource::collection($projects),
+      'users' => UserResource::collection($users)
+    ]);
   }
 
   /**
    * Store a newly created resource in storage.
    */
   public function store(StoreTaskRequest $request) {
-    //
+    $data = $request->validated();
+    /** @var $image \Illuminate\Http\UploadedFile */
+    $image = $data['image'] ?? null;
+    $data['created_by'] = Auth::id();
+    $data['updated_by'] = Auth::id();
+    if ($image) {
+      // To work execute this command -> "php artisan storage:link", or investigate
+      $data['image_path'] = $image->store('task/' . Str::random(8), 'public');
+    }
+
+    Task::create($data);
+
+    return to_route('task.index')->with('success', 'task was created');
   }
 
   /**
@@ -58,14 +76,32 @@ class TaskController extends Controller {
    * Show the form for editing the specified resource.
    */
   public function edit(Task $task) {
-    //
+    $projects = Project::query()->orderBy('name')->get();
+    $users = User::query()->orderBy('name')->get();
+
+    return inertia("Task/Edit", [
+      "task" => new TaskResource($task),
+      'projects' => ProjectResource::collection($projects),
+      'users' => UserResource::collection($users)
+    ]);
   }
 
   /**
    * Update the specified resource in storage.
    */
   public function update(UpdateTaskRequest $request, Task $task) {
-    //
+    $data = $request->validated();
+    $image = $data['image'] ?? null;
+    $data['updated_by'] = Auth::id();
+    if ($image) {
+      if ($task->image_path) {
+        Storage::disk('public')->deleteDirectory(dirname($task->image_path));
+      }
+      // To work execute this command -> "php artisan storage:link", or investigate
+      $data['image_path'] = $image->store('task/' . Str::random(8), 'public');
+    }
+    $task->update($data);
+    return to_route('task.index')->with('success', "Task \"$task->name\" was updated.");
   }
 
   /**
