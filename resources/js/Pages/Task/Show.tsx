@@ -14,9 +14,17 @@ function TaskDetail({ task, auth }: TaskDetailProps) {
 		<AuthenticatedLayout
 			user={auth.user}
 			header={
-				<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-					Task {task.name}
-				</h2>
+				<div className="flex justify-between items-center">
+					<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+						Task "{task.name}"
+					</h2>
+					<Link
+						href={route("task.edit", task.id)}
+						className="inline-flex w-full justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-gray-100 shadow-sm hover:bg-blue-500 sm:w-auto"
+					>
+						Edit
+					</Link>
+				</div>
 			}
 		>
 			<Head title={`Task ${task.name}`} />
